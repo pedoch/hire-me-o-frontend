@@ -9,7 +9,7 @@ module.exports = {
         smallTablet: { max: "600px" },
         // => @media (max-width: 600px) { ... }
 
-        phone: { max: "400px" },
+        phone: { max: "450px" },
         // => @media (max-width: 350px) { ... }
       },
     },
