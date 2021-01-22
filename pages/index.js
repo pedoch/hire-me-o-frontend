@@ -2,13 +2,14 @@ import { Avatar, Input, Select } from "antd";
 import Head from "next/head";
 import Link from "next/link";
 import { MainLayout } from "../components/common";
+import makeApiCall from "../utils/makeApiCall";
 
-export default function Home() {
+function Home({ tags, states }) {
   const { Option } = Select;
   return (
     <MainLayout>
       <Head>
-        <title>Home | Hire Me O</title>
+        <title>Home | Hire Me O!</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div
@@ -68,62 +69,66 @@ export default function Home() {
           style={{ maxWidth: "1500px" }}
         >
           {[1, 2, 3, 4, 5, 6, 7, 8].map((job, index) => (
-            <div
-              key={index}
-              className="col-span-1 shadow h-64 rounded p-4 m-2 flex flex-col justify-between"
-            >
-              <span>
-                <Avatar shape="square" size={64} className="mb-2" />
-                <p className="font-semibold text-lg">Software Developemnt Intern at StriTech</p>
-                <p className="text-sm">StriTech</p>
-                <p className="text-sm">Lagos</p>
-              </span>
-              <p className="text-sm">1 month ago</p>
-            </div>
+            <Link href="#" key={index}>
+              <a className="hover:text-black">
+                <div className="col-span-1 shadow h-64 rounded p-4 m-2 flex flex-col justify-between hover:shadow-lg">
+                  <span>
+                    <Avatar shape="square" size={64} className="mb-2" />
+                    <p className="font-semibold text-lg">Software Developemnt Intern at StriTech</p>
+                    <Link href="/stritech">
+                      <a>
+                        <p className="text-sm">StriTech</p>
+                      </a>
+                    </Link>
+                    <p className="text-sm">Lagos</p>
+                  </span>
+                  <p className="text-sm">1 month ago</p>
+                </div>
+              </a>
+            </Link>
           ))}
         </div>
       </div>
       <div className="w-full py-8 px-4 flex flex-col items-center mb-16">
         <p className="text-2xl mb-2 font-semibold">Job Categories</p>
         <hr className="w-full max-w-xs mb-8" />
-        <ul className="ul-list-spread" style={{ maxWidth: "1500px" }}>
-          {[
-            "Accounting",
-            "Auditing & Finance",
-            "Admin & Office",
-            "Building & Architecture",
-            "Community & Social Services",
-            "Consulting & Strategy",
-            "Creative & Design",
-            "Customer Service & Support",
-            "Driver & Transport Services",
-            "Engineering & Technology",
-            "Estate Agents & Property Management",
-            "Farming & Agriculture",
-            "Food Services & Catering",
-            "Health & Safety",
-            "Hospitality & Leisure",
-            "Human Resources",
-            "Legal Services",
-            "Management & Business Development",
-            "Marketing & Communications",
-            "Medical & Pharmaceutical",
-            "Product & Project Management",
-            "Quality Control & Assurance",
-            "Research, Teaching & Training",
-            "Sales",
-            "Software & Data",
-            "Supply Chain & Procurement",
-            "Trades & Services",
-          ].map((job, index) => (
-            <Link href="#">
-              <a className="hover:text-green-700 hover:underline">
-                <li className="text-lg mb-2">{job}</li>
-              </a>
-            </Link>
-          ))}
-        </ul>
+        {tags ? (
+          <ul className="ul-list-spread" style={{ maxWidth: "1500px" }}>
+            {tags.map((tag, index) => (
+              <Link href={`/search?tag=${tag.name}`} key={index}>
+                <a className="hover:text-green-700 hover:underline">
+                  <li className="text-lg mb-2">{tag.name}</li>
+                </a>
+              </Link>
+            ))}
+          </ul>
+        ) : (
+          <p>Oops! Something is wrong</p>
+        )}
       </div>
     </MainLayout>
   );
 }
+
+export async function getStaticProps(context) {
+  let states = [];
+  let tags = [];
+  try {
+    // let res = await makeApiCall("/states/get-states", { method: "get" });
+    // states = res.data.states;
+    let { data } = await makeApiCall({ url: "/tags/get-tags", method: "get" });
+    // let res = await axios.get("/tags/get-tags");
+    tags = data.tags;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return {
+      props: {
+        // states,
+        tags,
+      },
+    };
+  }
+}
+
+export default Home;
