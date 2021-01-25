@@ -1,17 +1,19 @@
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Button, Input, Select, Tabs, Tooltip } from "antd";
-import axios from "axios";
-import { Formik } from "formik";
-import Head from "next/head";
-import Link from "next/link";
-import { useState } from "react";
-import * as yup from "yup";
-import { MainLayout } from "../components/common";
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, Input, Select, Tabs, Tooltip } from 'antd';
+import axios from 'axios';
+import { Formik } from 'formik';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import * as yup from 'yup';
+import { MainLayout } from '../components/common';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
 
-function Signup({ states, tags }) {
+function Signup({ states, tags, tabKey }) {
+  const [key, setKey] = useState(tabKey);
+
   return (
     <MainLayout>
       <Head>
@@ -22,7 +24,14 @@ function Signup({ states, tags }) {
           <div className="w-full flex justify-center mb-4">
             <p className="text-xl font-medium mb-4">Sign Up</p>
           </div>
-          <Tabs type="card" centered={true} defaultActiveKey="1" size="large" animated={true}>
+          <Tabs
+            type="card"
+            centered={true}
+            defaultActiveKey={key}
+            // activeKey={key}
+            size="large"
+            animated={true}
+          >
             <TabPane tab="User" key="1">
               <UserSignUp states={states} tags={tags} />
             </TabPane>
@@ -31,7 +40,7 @@ function Signup({ states, tags }) {
             </TabPane>
           </Tabs>
           <p>
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link href="/login">
               <a className="text-green-500">LOGIN</a>
             </Link>
@@ -45,35 +54,35 @@ function Signup({ states, tags }) {
 function UserSignUp({ states, tags }) {
   const [submitting, setSubmitting] = useState(false);
   const [initalValues, setInitialValues] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    bio: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    bio: '',
     tags: [],
-    streetAddress: "",
-    state: "",
-    password: "",
-    confirmPassword: "",
+    streetAddress: '',
+    state: '',
+    password: '',
+    confirmPassword: '',
   });
   const userValidation = yup.object().shape({
-    firstName: yup.string().required("Please enter your first name"),
-    lastName: yup.string().required("Please enter your last name"),
+    firstName: yup.string().required('Please enter your first name'),
+    lastName: yup.string().required('Please enter your last name'),
     email: yup
       .string()
-      .required("Please enter your email address")
-      .email("Please enter a valid email address"),
+      .required('Please enter your email address')
+      .email('Please enter a valid email address'),
     bio: yup.string(),
-    tags: yup.array().min(1, "Please select at least 1 tag"),
+    tags: yup.array().min(1, 'Please select at least 1 tag'),
     streetAddress: yup.string(),
-    state: yup.string().required("Please select a state"),
+    state: yup.string().required('Please select a state'),
     password: yup
       .string()
-      .required("Please enter your password")
-      .min(8, "Password should be at least 8 characters long"),
+      .required('Please enter your password')
+      .min(8, 'Password should be at least 8 characters long'),
     confirmPassword: yup
       .string()
-      .required("Please enter password again")
-      .oneOf([yup.ref("password"), null], "Password must match"),
+      .required('Please enter password again')
+      .oneOf([yup.ref('password'), null], 'Password must match'),
   });
   return (
     <Formik
@@ -157,7 +166,7 @@ function UserSignUp({ states, tags }) {
             </div>
             <div className="w-full mb-4">
               <label htmlFor="tags" className="font-medium flex items-center">
-                Tags{" "}
+                Tags{' '}
                 <Tooltip
                   placement="top"
                   title={
@@ -166,7 +175,7 @@ function UserSignUp({ states, tags }) {
                 >
                   <QuestionCircleOutlined
                     twoToneColor={true}
-                    trigger={["hover", "click"]}
+                    trigger={['hover', 'click']}
                     className="pt-1 mb-1 ml-1 text-lg"
                   />
                 </Tooltip>
@@ -178,7 +187,7 @@ function UserSignUp({ states, tags }) {
                 disabled={submitting}
                 size="large"
                 placeholder="Select Tags"
-                onChange={(value) => setFieldValue("tags", value)}
+                onChange={(value) => setFieldValue('tags', value)}
               >
                 {tags.map((tag, index) => (
                   <Option key={tag.name + index} value={tag.name}>
@@ -217,7 +226,7 @@ function UserSignUp({ states, tags }) {
                   disabled={submitting}
                   size="large"
                   placeholder="Select State"
-                  onChange={(value) => setFieldValue("state", value)}
+                  onChange={(value) => setFieldValue('state', value)}
                 >
                   {states.map((state, index) => (
                     <Option key={state.name + index} value={state.name}>
@@ -287,33 +296,33 @@ function UserSignUp({ states, tags }) {
 function CopmanySignUp({ states, tags }) {
   const [submitting, setSubmitting] = useState(false);
   const [initalValues, setInitialValues] = useState({
-    name: "",
-    email: "",
-    description: "",
+    name: '',
+    email: '',
+    description: '',
     tags: [],
-    streetAddress: "",
-    state: "",
-    password: "",
-    confirmPassword: "",
+    streetAddress: '',
+    state: '',
+    password: '',
+    confirmPassword: '',
   });
   const companyValidation = yup.object().shape({
-    name: yup.string().required("Please enter company name"),
+    name: yup.string().required('Please enter company name'),
     email: yup
       .string()
-      .required("Please enter your email address")
-      .email("Please enter a valid email address"),
+      .required('Please enter your email address')
+      .email('Please enter a valid email address'),
     description: yup.string(),
-    tags: yup.array().min(1, "Please select at least 1 tag"),
-    streetAddress: yup.string().required("Please enter company street address "),
-    state: yup.string().required("Please select a state"),
+    tags: yup.array().min(1, 'Please select at least 1 tag'),
+    streetAddress: yup.string().required('Please enter company street address '),
+    state: yup.string().required('Please select a state'),
     password: yup
       .string()
-      .required("Please enter your password")
-      .min(8, "Password should be at least 8 characters long"),
+      .required('Please enter your password')
+      .min(8, 'Password should be at least 8 characters long'),
     confirmPassword: yup
       .string()
-      .required("Please enter password again")
-      .oneOf([yup.ref("password"), null], "Password must match"),
+      .required('Please enter password again')
+      .oneOf([yup.ref('password'), null], 'Password must match'),
   });
   return (
     <Formik
@@ -379,16 +388,16 @@ function CopmanySignUp({ states, tags }) {
             </div>
             <div className="w-full mb-4">
               <label htmlFor="tags" className="font-medium flex items-center">
-                Tags{" "}
+                Tags{' '}
                 <Tooltip
                   placement="top"
                   title={
-                    "Tags are a way of letting applicants know the type of work you do as a company."
+                    'Tags are a way of letting applicants know the type of work you do as a company.'
                   }
                 >
                   <QuestionCircleOutlined
                     twoToneColor={true}
-                    trigger={["hover", "click"]}
+                    trigger={['hover', 'click']}
                     className="pt-1 mb-1 ml-1 text-lg"
                   />
                 </Tooltip>
@@ -400,13 +409,14 @@ function CopmanySignUp({ states, tags }) {
                 disabled={submitting}
                 size="large"
                 placeholder="Select Tags"
-                onChange={(value) => setFieldValue("tags", value)}
+                onChange={(value) => setFieldValue('tags', value)}
               >
                 {tags.map((tag, index) => (
                   <Option key={tag.name + index} value={tag.name}>
                     {tag.name}
                   </Option>
                 ))}
+                <Option value="tag">Tag</Option>
               </Select>
               {errors.tags && touched.tags && (
                 <p className="mt-1 text-red-500 text-sm">{errors.tags}</p>
@@ -439,7 +449,7 @@ function CopmanySignUp({ states, tags }) {
                   disabled={submitting}
                   size="large"
                   placeholder="Select State"
-                  onChange={(value) => setFieldValue("state", value)}
+                  onChange={(value) => setFieldValue('state', value)}
                 >
                   {states.map((state, index) => (
                     <Option key={state.name + index} value={state.name}>
@@ -506,24 +516,30 @@ function CopmanySignUp({ states, tags }) {
   );
 }
 
-export async function getStaticProps(context) {
+Signup.getInitialProps = async ({ query }) => {
   let states = [];
   let tags = [];
+  let tabKey = '1';
   try {
-    let res = await axios.get("/states/get-states");
+    let res = await axios.get('/states/get-states');
     states = res.data.states;
-    res = await axios.get("/tags/get-tags");
+
+    res = await axios.get('/tags/get-tags');
     tags = res.data.tags;
+
+    if (query != {}) {
+      if (query.selected && query.selected === 'company') tabKey = '2';
+      else if (query.selected && query.selected === 'seeker') tabKey = '1';
+    }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   } finally {
     return {
-      props: {
-        states,
-        tags,
-      },
+      states,
+      tags,
+      tabKey,
     };
   }
-}
+};
 
 export default Signup;
