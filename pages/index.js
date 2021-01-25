@@ -34,6 +34,7 @@ function Home({ tags, states }) {
             style={{ width: '60%' }}
             size="large"
             placeholder="Search..."
+            enterButton
             // enterButton="Search"
           />
         </Input.Group>
@@ -72,18 +73,20 @@ function Home({ tags, states }) {
           {[1, 2, 3, 4, 5, 6, 7, 8].map((job, index) => (
             <Link href="#" key={index}>
               <a className="hover:text-black">
-                <div className="col-span-1 shadow h-64 rounded p-4 m-2 flex flex-col justify-between hover:shadow-lg">
+                <div className="col-span-1 shadow h-56 rounded p-4 m-2 flex flex-col justify-between hover:shadow-lg">
                   <span>
                     <Avatar shape="square" size={64} className="mb-2" />
-                    <p className="font-semibold text-lg">Software Developemnt Intern at StriTech</p>
-                    <Link href="/stritech">
+                    <p className="font-semibold text-lg">Software Developemnt Intern at:</p>
+                    <Link href="/company/stritech">
                       <a>
-                        <p className="text-sm">StriTech</p>
+                        <p className="text-lg font-semibold text-primary">StriTech</p>
                       </a>
                     </Link>
-                    <p className="text-sm">Lagos</p>
                   </span>
-                  <p className="text-sm">1 month ago</p>
+                  <div>
+                    <p className="text-sm">Lagos</p>
+                    <p className="text-sm">1 month ago</p>
+                  </div>
                 </div>
               </a>
             </Link>
