@@ -3,9 +3,9 @@ import Navbar from './Navbar';
 
 function MainLayout({ children }) {
   return (
-    <div className="w-screen h-screen overflow-x-hidden text-black">
+    <div className="w-screen h-screen overflow-x-hidden flex flex-col text-black">
       <Navbar />
-      <div className="w-full flex-grow h-full pt-16">{children}</div>
+      <div className="w-full flex-grow pt-16">{children}</div>
       <Footer />
     </div>
   );
