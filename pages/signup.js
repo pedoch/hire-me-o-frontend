@@ -1,12 +1,14 @@
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Button, Input, Select, Tabs, Tooltip } from 'antd';
-import axios from 'axios';
+import { toaster } from 'evergreen-ui';
 import { Formik } from 'formik';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as yup from 'yup';
 import { MainLayout } from '../components/common';
+import makeApiCall from '../utils/makeApiCall';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -54,8 +56,8 @@ function Signup({ states, tags, tabKey }) {
 function UserSignUp({ states, tags }) {
   const [submitting, setSubmitting] = useState(false);
   const [initalValues, setInitialValues] = useState({
-    firstName: '',
-    lastName: '',
+    firstname: '',
+    lastname: '',
     email: '',
     bio: '',
     tags: [],
@@ -64,9 +66,12 @@ function UserSignUp({ states, tags }) {
     password: '',
     confirmPassword: '',
   });
+
+  const router = useRouter();
+
   const userValidation = yup.object().shape({
-    firstName: yup.string().required('Please enter your first name'),
-    lastName: yup.string().required('Please enter your last name'),
+    firstname: yup.string().required('Please enter your first name'),
+    lastname: yup.string().required('Please enter your last name'),
     email: yup
       .string()
       .required('Please enter your email address')
@@ -88,44 +93,70 @@ function UserSignUp({ states, tags }) {
     <Formik
       initialValues={initalValues}
       validationSchema={userValidation}
-      onSubmit={(values) => {
-        console.log(values);
+      onSubmit={async (values) => {
+        setSubmitting(true);
+        try {
+          // console.log(values);
+          let { data, message } = await makeApiCall('/user/signup', {
+            method: 'post',
+            data: values,
+          });
+          toaster.success(message);
+          setSubmitting(false);
+          window.location.replace('/login');
+        } catch (error) {
+          if (!error.response) {
+            toaster.danger('Unable to sign you up', {
+              description: 'May be a network error',
+            });
+          } else if (error.response.status === 500) {
+            toaster.danger('Unable to sign you up', {
+              description: 'Must be a problem on our side',
+            });
+          } else {
+            // console.log(error.response);
+            toaster.danger('Unable to sign you up', {
+              description: error.response.data.errors[0].msg,
+            });
+          }
+          setSubmitting(false);
+        }
       }}
     >
       {({ values, handleChange, handleSubmit, setFieldValue, touched, errors }) => {
         return (
-          <form className="w-full max-w-2xl shadow my-8 p-8" onSubmit={handleSubmit}>
+          <form className="w-full max-w-2xl mx-auto shadow my-8 p-8" onSubmit={handleSubmit}>
             <div className="flex phone:flex-wrap w-full space-x-5 phone:space-x-0">
               <div className="w-full mb-4">
-                <label htmlFor="firstName" className="font-medium">
+                <label htmlFor="firstname" className="font-medium">
                   First Name
                 </label>
                 <Input
-                  name="firstName"
+                  name="firstname"
                   className="w-full"
                   disabled={submitting}
                   size="large"
                   placeholder="First Name"
                   onChange={handleChange}
                 />
-                {errors.firstName && touched.firstName && (
-                  <p className="mt-1 text-red-500 text-sm">{errors.firstName}</p>
+                {errors.firstname && touched.firstname && (
+                  <p className="mt-1 text-red-500 text-sm">{errors.firstname}</p>
                 )}
               </div>
               <div className="w-full mb-4">
-                <label htmlFor="lastName" className="font-medium">
+                <label htmlFor="lastname" className="font-medium">
                   Last Name
                 </label>
                 <Input
-                  name="lastName"
+                  name="lastname"
                   className="w-full"
                   disabled={submitting}
                   size="large"
                   placeholder="Last Name"
                   onChange={handleChange}
                 />
-                {errors.lastName && touched.lastName && (
-                  <p className="mt-1 text-red-500 text-sm">{errors.lastName}</p>
+                {errors.lastname && touched.lastname && (
+                  <p className="mt-1 text-red-500 text-sm">{errors.lastname}</p>
                 )}
               </div>
             </div>
@@ -190,7 +221,7 @@ function UserSignUp({ states, tags }) {
                 onChange={(value) => setFieldValue('tags', value)}
               >
                 {tags.map((tag, index) => (
-                  <Option key={tag.name + index} value={tag.name}>
+                  <Option key={tag.name + index} value={tag._id}>
                     {tag.name}
                   </Option>
                 ))}
@@ -227,6 +258,8 @@ function UserSignUp({ states, tags }) {
                   size="large"
                   placeholder="Select State"
                   onChange={(value) => setFieldValue('state', value)}
+                  showSearch
+                  filterOption
                 >
                   {states.map((state, index) => (
                     <Option key={state.name + index} value={state.name}>
@@ -250,7 +283,7 @@ function UserSignUp({ states, tags }) {
                   className="w-full"
                   disabled={submitting}
                   size="large"
-                  placeholder="password"
+                  placeholder="Password"
                   visibilityToggle={true}
                   onChange={handleChange}
                 />
@@ -284,7 +317,7 @@ function UserSignUp({ states, tags }) {
               disabled={submitting}
               size="large"
             >
-              Submit
+              {submitting ? 'Submitting...' : 'Submit'}
             </Button>
           </form>
         );
@@ -328,16 +361,42 @@ function CopmanySignUp({ states, tags }) {
     <Formik
       initialValues={initalValues}
       validationSchema={companyValidation}
-      onSubmit={(values) => {
-        console.log(values);
+      onSubmit={async (values) => {
+        setSubmitting(true);
+        try {
+          // console.log(values);
+          let { data, message } = await makeApiCall('/company/signup', {
+            method: 'post',
+            data: values,
+          });
+          toaster.success(message);
+          setSubmitting(false);
+          router.push('/login');
+        } catch (error) {
+          if (!error.response) {
+            toaster.danger('Unable to sign you up', {
+              description: 'May be a network error',
+            });
+          } else if (error.response.status === 500) {
+            toaster.danger('Unable to sign you up', {
+              description: 'Must be a problem on our side',
+            });
+          } else {
+            // console.log(error.response);
+            toaster.danger('Unable to sign you up', {
+              description: error.response.data.errors[0].msg,
+            });
+          }
+          setSubmitting(false);
+        }
       }}
     >
       {({ values, handleChange, handleSubmit, setFieldValue, touched, errors }) => {
         return (
-          <form className="w-full max-w-2xl shadow my-8 p-8" onSubmit={handleSubmit}>
+          <form className="w-full max-w-2xl mx-auto shadow my-8 p-8" onSubmit={handleSubmit}>
             <div className="flex phone:flex-wrap w-full space-x-5 phone:space-x-0">
               <div className="w-full mb-4">
-                <label htmlFor="firstName" className="font-medium">
+                <label htmlFor="firstname" className="font-medium">
                   Name
                 </label>
                 <Input
@@ -412,11 +471,10 @@ function CopmanySignUp({ states, tags }) {
                 onChange={(value) => setFieldValue('tags', value)}
               >
                 {tags.map((tag, index) => (
-                  <Option key={tag.name + index} value={tag.name}>
+                  <Option key={tag.name + index} value={tag._id}>
                     {tag.name}
                   </Option>
                 ))}
-                <Option value="tag">Tag</Option>
               </Select>
               {errors.tags && touched.tags && (
                 <p className="mt-1 text-red-500 text-sm">{errors.tags}</p>
@@ -450,6 +508,8 @@ function CopmanySignUp({ states, tags }) {
                   size="large"
                   placeholder="Select State"
                   onChange={(value) => setFieldValue('state', value)}
+                  showSearch
+                  filterOption
                 >
                   {states.map((state, index) => (
                     <Option key={state.name + index} value={state.name}>
@@ -473,7 +533,7 @@ function CopmanySignUp({ states, tags }) {
                   className="w-full"
                   disabled={submitting}
                   size="large"
-                  placeholder="password"
+                  placeholder="Password"
                   visibilityToggle={true}
                   onChange={handleChange}
                 />
@@ -507,7 +567,7 @@ function CopmanySignUp({ states, tags }) {
               disabled={submitting}
               size="large"
             >
-              Submit
+              {submitting ? 'Submitting...' : 'Submit'}
             </Button>
           </form>
         );
@@ -521,10 +581,10 @@ Signup.getInitialProps = async ({ query }) => {
   let tags = [];
   let tabKey = '1';
   try {
-    let res = await axios.get('/states/get-states');
+    let res = await makeApiCall('/states/get-states', { method: 'get' });
     states = res.data.states;
 
-    res = await axios.get('/tags/get-tags');
+    res = await makeApiCall('/tags/get-tags', { method: 'get' });
     tags = res.data.tags;
 
     if (query != {}) {

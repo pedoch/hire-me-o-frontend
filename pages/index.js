@@ -14,8 +14,8 @@ function Home({ tags, states }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div
-        style={{ backgroundImage: `url("/images/jumbotron-home.jpg")` }}
-        className="w-full h-64 bg-left bg-green-700 bg-cover"
+        style={{ backgroundImage: `url("/images/jumbotron-home.jpg")`, height: '500px' }}
+        className="w-full bg-center bg-green-700 bg-cover"
         title="Photo by Free To Use on Unsplash"
       ></div>
       <div className="w-full flex flex-col justify-center items-center py-8 px-4 shadow">
@@ -48,23 +48,23 @@ function Home({ tags, states }) {
           style={{ maxWidth: '1000px' }}
         >
           <p className="shadow rounded max-w-md p-8 text-center mt-4">
-            <Link href="/signup?selected=company">
-              <a className="text-green-700 font-semibold">SIGN UP</a>
-            </Link>{' '}
+            <a href="/signup?selected=company" className="text-green-700 font-semibold">
+              SIGN UP
+            </a>{' '}
             as an Employer and register your company/business and gain access to potential
             employees.
           </p>
           <p className="shadow rounded max-w-md p-8 text-center mt-4">
-            <Link href="/signup?selected=seeker">
-              <a className="text-green-700 font-semibold">SIGN UP</a>
-            </Link>{' '}
+            <a href="/signup?selected=seeker" className="text-green-700 font-semibold">
+              SIGN UP
+            </a>{' '}
             as a job seeker, build your profile, upload your CV and start applying for your dream
             job!
           </p>
         </div>
       </div>
       <div className="w-full py-8 px-4 flex flex-col items-center">
-        <p className="text-2xl mb-2 font-semibold">Top Jobs</p>
+        <p className="text-2xl mb-2 font-semibold">Top Jobs for You</p>
         <hr className="w-full max-w-xs mb-8" />
         <div
           className="w-full grid grid-cols-4 tablet:grid-cols-3 smallTablet:grid-cols-2 phone:grid-cols-1"
@@ -120,7 +120,7 @@ export async function getStaticProps(context) {
   try {
     // let res = await makeApiCall("/states/get-states", { method: "get" });
     // states = res.data.states;
-    let { data } = await makeApiCall({ url: '/tags/get-tags', method: 'get' });
+    let { data } = await makeApiCall('/tags/get-tags', { method: 'get' });
     // let res = await axios.get("/tags/get-tags");
     tags = data.tags;
   } catch (error) {

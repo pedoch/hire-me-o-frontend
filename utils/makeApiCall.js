@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-async function makeApiCall({ url, config }) {
+async function makeApiCall(url, config) {
   try {
     const { data } = await axios({
       url: `https://hire-me-o.herokuapp.com/api${url}`,
