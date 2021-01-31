@@ -107,7 +107,7 @@ function UserSignUp({ states, tags }) {
         } catch (error) {
           if (!error.response) {
             toaster.danger('Unable to sign you up', {
-              description: 'May be a network error',
+              description: 'Maybe a network error',
             });
           } else if (error.response.status === 500) {
             toaster.danger('Unable to sign you up', {
@@ -219,6 +219,9 @@ function UserSignUp({ states, tags }) {
                 size="large"
                 placeholder="Select Tags"
                 onChange={(value) => setFieldValue('tags', value)}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().includes(input.toLowerCase())
+                }
               >
                 {tags.map((tag, index) => (
                   <Option key={tag.name + index} value={tag._id}>
@@ -371,7 +374,7 @@ function CopmanySignUp({ states, tags }) {
           });
           toaster.success(message);
           setSubmitting(false);
-          router.push('/login');
+          window.location.replace('/login');
         } catch (error) {
           if (!error.response) {
             toaster.danger('Unable to sign you up', {
@@ -469,6 +472,9 @@ function CopmanySignUp({ states, tags }) {
                 size="large"
                 placeholder="Select Tags"
                 onChange={(value) => setFieldValue('tags', value)}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().includes(input.toLowerCase())
+                }
               >
                 {tags.map((tag, index) => (
                   <Option key={tag.name + index} value={tag._id}>
