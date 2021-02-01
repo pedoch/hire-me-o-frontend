@@ -41,7 +41,7 @@ function Home({ tags, states }) {
       </div>
       <div className="w-full py-8 px-4 flex flex-col items-center">
         <p className="text-2xl mb-8">
-          Are you an <b>Employer</b> or a <b>Seeker</b>?
+          Are you an <b>Recruit</b> or a <b>Recruiter</b>?
         </p>
         <div
           className="w-full justify-around flex text-lg flex-wrap"
@@ -51,15 +51,14 @@ function Home({ tags, states }) {
             <a href="/signup?selected=company" className="text-green-700 font-semibold">
               SIGN UP
             </a>{' '}
-            as an Employer and register your company/business and gain access to potential
+            as an Recruiter and register your company/business and gain access to potential
             employees.
           </p>
           <p className="shadow rounded max-w-md p-8 text-center mt-4">
             <a href="/signup?selected=seeker" className="text-green-700 font-semibold">
               SIGN UP
             </a>{' '}
-            as a job seeker, build your profile, upload your CV and start applying for your dream
-            job!
+            as a recruit, build your profile, upload your CV and start applying for your dream job!
           </p>
         </div>
       </div>
@@ -99,7 +98,7 @@ function Home({ tags, states }) {
         {tags ? (
           <ul className="ul-list-spread" style={{ maxWidth: '1500px' }}>
             {tags.map((tag, index) => (
-              <Link href={`/search?tag=${tag.name}`} key={index}>
+              <Link href={`/search?tag=${tag._id}`} key={index}>
                 <a className="hover:text-green-700 hover:underline">
                   <li className="text-lg mb-2">{tag.name}</li>
                 </a>
