@@ -29,7 +29,7 @@ function Navbar() {
           content={
             <Menu>
               <Menu.Group>
-                <Menu.Item onSelect={() => window.location.replace('/profile')}>Profile</Menu.Item>
+                <Menu.Item onSelect={() => window.location.replace('/me')}>Profile</Menu.Item>
               </Menu.Group>
               <Menu.Divider />
               <Menu.Group>
@@ -82,7 +82,7 @@ function Navbar() {
             </div>
             <Menu.Group>
               {isLoggedIn && (
-                <Menu.Item onSelect={() => window.location.replace('/profile')}>Profile</Menu.Item>
+                <Menu.Item onSelect={() => window.location.replace('/me')}>Profile</Menu.Item>
               )}
               <Menu.Item onSelect={() => window.location.replace('/search')}>Jobs</Menu.Item>
               {!isLoggedIn && (

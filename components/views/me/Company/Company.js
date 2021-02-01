@@ -1,7 +1,7 @@
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Input, Upload } from "antd";
-import { Formik } from "formik";
-import { useState } from "react";
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, Input, Upload } from 'antd';
+import { Formik } from 'formik';
+import { useState } from 'react';
 
 function User() {
   const [edit, setEdit] = useState(false);
