@@ -10,7 +10,6 @@ import handleError from '../../../../utils/handleAPIErrors';
 import makeApiCall from '../../../../utils/makeApiCall';
 
 function UserDetails() {
-  const [edit, setEdit] = useState(false);
   const [states, setStates] = useState([]);
   const [fetchingStates, setFecthingStates] = useState(true);
   const [subtting, setSubmitting] = useState(false);
@@ -23,6 +22,7 @@ function UserDetails() {
     state: '',
   });
   const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const {
     state: { user, token },
@@ -137,7 +137,7 @@ function UserDetails() {
         <div className="flex flex-wrap space-x-2">
           <div>
             <Upload onChange={(info) => onUpload(info)} maxCount={'1'} multiple={false}>
-              <Button className="mb-2" icon={<UploadOutlined />} disabled={uploading}>
+              <Button className="mb-2" icon={<UploadOutlined />} disabled={uploading || deleting}>
                 {uploading
                   ? 'Uploading...'
                   : user?.profilePicture
@@ -151,7 +151,7 @@ function UserDetails() {
               type="link"
               danger
               onClick={async () => {
-                setUploading(true);
+                setDeleting(true);
                 try {
                   const res = await makeApiCall('/user/update-profile-picture', {
                     method: 'POST',
@@ -180,7 +180,7 @@ function UserDetails() {
                 } catch (error) {
                   handleError('Unable to delete photo', error);
                 } finally {
-                  setUploading(false);
+                  setDeleting(false);
                 }
               }}
             >
@@ -245,13 +245,6 @@ function UserDetails() {
         {({ values, setFieldValue, handleChange, handleSubmit, errors, touched }) => {
           return (
             <form className="w-full" onSubmit={handleSubmit}>
-              <div className="w-full flex justify-end">
-                {!edit && (
-                  <Button type="link" htmlType="button" onClick={() => setEdit(true)} size="large">
-                    Edit
-                  </Button>
-                )}
-              </div>
               <div className="flex phone:flex-wrap w-full space-x-5 phone:space-x-0">
                 <div className="w-full mb-4">
                   <label htmlFor="firstname" className="font-medium">
@@ -260,7 +253,7 @@ function UserDetails() {
                   <Input
                     name="firstname"
                     className="w-full"
-                    disabled={!edit || subtting}
+                    disabled={subtting}
                     value={values.firstname}
                     size="large"
                     placeholder="First Name"
@@ -277,7 +270,7 @@ function UserDetails() {
                   <Input
                     name="lastname"
                     className="w-full"
-                    disabled={!edit || subtting}
+                    disabled={subtting}
                     value={values.lastname}
                     size="large"
                     placeholder="Last Name"
@@ -296,7 +289,7 @@ function UserDetails() {
                   <Input
                     name="email"
                     className="w-full phone:w-full"
-                    disabled={!edit || subtting}
+                    disabled={subtting}
                     value={values.email}
                     size="large"
                     placeholder="Email"
@@ -325,7 +318,7 @@ function UserDetails() {
                   name="bio"
                   className="w-full"
                   rows={5}
-                  disabled={!edit || subtting}
+                  disabled={subtting}
                   value={values.bio}
                   size="large"
                   placeholder="Bio"
@@ -343,7 +336,7 @@ function UserDetails() {
                   <Input
                     name="streetAddress"
                     className="w-full"
-                    disabled={!edit || subtting}
+                    disabled={subtting}
                     value={values.streetAddress}
                     size="large"
                     placeholder="Street Address"
@@ -359,7 +352,7 @@ function UserDetails() {
                   <Select
                     name="state"
                     className="w-full"
-                    disabled={!edit || subtting}
+                    disabled={subtting}
                     value={values.state}
                     size="large"
                     placeholder="State"
@@ -382,18 +375,10 @@ function UserDetails() {
                   type="primary"
                   htmlType="submit"
                   className="mr-2 bg-green-700 hover:bg-green-500 border-green-700"
-                  disabled={!edit || subtting}
+                  disabled={subtting}
                   size="large"
                 >
                   Save
-                </Button>
-                <Button
-                  disabled={!edit || subtting}
-                  htmlType="button"
-                  onClick={() => setEdit(false)}
-                  size="large"
-                >
-                  Cancel
                 </Button>
               </div>
             </form>
