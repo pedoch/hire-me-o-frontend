@@ -1,11 +1,9 @@
 import { Tabs } from 'antd';
-import { useState } from 'react';
 import Security from './Security';
+import Skills_Experience from './Skills_Experience';
 import UserDetails from './UserDetails';
 
 function User() {
-  const [edit2, setEdit2] = useState(false);
-
   const { TabPane } = Tabs;
   return (
     <div className="w-full max-w-4xl mx-4 my-8">
@@ -14,7 +12,10 @@ function User() {
         <TabPane tab="User Details" key="1">
           <UserDetails />
         </TabPane>
-        <TabPane tab="Security" key="2">
+        <TabPane tab="Skills and Experience" key="2">
+          <Skills_Experience />
+        </TabPane>
+        <TabPane tab="Security" key="3">
           <Security />
         </TabPane>
       </Tabs>
