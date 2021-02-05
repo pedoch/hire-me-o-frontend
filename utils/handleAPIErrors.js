@@ -10,6 +10,10 @@ function handleError(defaultMessage, error) {
     toaster.danger(defaultMessage, {
       description: 'Must be a problem on our side',
     });
+  } else if (!error.response.data.errors) {
+    toaster.danger(defaultMessage, {
+      description: 'Must be a problem on our side',
+    });
   } else {
     // console.log(error.response);
     toaster.danger(defaultMessage, {
