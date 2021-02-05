@@ -92,7 +92,7 @@ function Skills_Experience() {
   };
 
   return (
-    <div className="w-full max-w-4xl my-8 p-8 phone:p-3">
+    <div className="w-full max-w-4xl my-8 phone:p-3">
       <p className="text-xl font-medium mb-10">Skils and Experience</p>
       <Formik
         initialValues={{
@@ -210,9 +210,9 @@ function Skills_Experience() {
                 {user?.resume && <p className="italic">{user?.resume?.name}</p>}
               </div>
               <hr className="mb-5" />
-              <div className="w-full mb-4">
+              <div className="w-full mb-5">
                 <label htmlFor="totalYearsOfExperience" className="font-medium">
-                  Total Years of Experience
+                  Years of Proffesional Work Experience
                 </label>
                 <InputNumber
                   visibilityToggle={true}
@@ -226,6 +226,7 @@ function Skills_Experience() {
                   <p className="mt-1 text-red-500 text-sm">{errors.totalYearsOfExperience}</p>
                 )}
               </div>
+              <hr className="mb-5" />
               <div className="flex phone:flex-wrap w-full space-x-5 phone:space-x-0">
                 <div className="w-full mb-4">
                   <label htmlFor="skill" className="font-medium">
@@ -235,6 +236,7 @@ function Skills_Experience() {
                     name="skill"
                     className="w-full"
                     size="large"
+                    placeholder="Skill"
                     value={values.skill}
                     onChange={handleChange}
                     onFocus={() => setFieldError('skill', '')}
@@ -245,7 +247,7 @@ function Skills_Experience() {
                 </div>
                 <div className="w-full mb-4">
                   <label htmlFor="yearsOfExperience" className="font-medium">
-                    Years of Experience
+                    Years of Experience Using Skill
                   </label>
                   <InputNumber
                     name="yearsOfExperience"
@@ -279,12 +281,12 @@ function Skills_Experience() {
               >
                 Add Skill
               </Button>
-              <div className="mt-4 flex flex-wrap">
+              <div className="flex flex-wrap w-full mt-5">
                 {skills.map((skill, index) => {
                   return (
                     <p
                       key={skill.name + index}
-                      className="text-lg font-semibold items-center mb-2 mr-5"
+                      className="text-lg font-semibold mb-2 mr-2 p-1 border border-gray-500 rounded h-auto"
                     >
                       {skill.name} - {skill.yearsOfExperience} year(s)
                       <DeleteOutlined
