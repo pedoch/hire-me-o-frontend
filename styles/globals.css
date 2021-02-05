@@ -24,6 +24,11 @@ a {
   column-count: 4;
 }
 
+.ant-upload-list,
+.ant-upload-list-text {
+  display: none;
+}
+
 button:focus {
   outline: none;
 }
