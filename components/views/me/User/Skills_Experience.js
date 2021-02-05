@@ -212,7 +212,7 @@ function Skills_Experience() {
               <hr className="mb-5" />
               <div className="w-full mb-5">
                 <label htmlFor="totalYearsOfExperience" className="font-medium">
-                  Years of Proffesional Work Experience
+                  Years of Professional Work Experience
                 </label>
                 <InputNumber
                   visibilityToggle={true}
