@@ -79,7 +79,7 @@ function Login() {
                     actions({ type: 'login', payload: { user: data.user, token: data.token } });
                     setSubmitting(false);
 
-                    toaster.success(`Hi ${data.user.firstname}`);
+                    toaster.success(`Hi ${data?.user?.firstname || data?.user?.name}`);
 
                     if (redirectURL) window.location.replace(redirectURL);
                     else window.location.replace('/');

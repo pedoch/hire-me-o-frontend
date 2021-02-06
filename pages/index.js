@@ -123,15 +123,15 @@ export async function getStaticProps(context) {
     // let res = await axios.get("/tags/get-tags");
     tags = data.tags;
   } catch (error) {
-    console.log(error);
-  } finally {
-    return {
-      props: {
-        // states,
-        tags,
-      },
-    };
+    console.error(error);
   }
+
+  return {
+    props: {
+      // states,
+      tags,
+    },
+  };
 }
 
 export default Home;

@@ -53,11 +53,11 @@ function Navbar() {
             <Avatar
               isSolid
               src={user?.profilePicture}
-              className="mr-1 my-1"
-              name={user?.firstname + ' ' + user?.lastname}
+              className="mr-2 my-1"
+              name={user?.name || user?.firstname + ' ' + user?.lastname}
               size={30}
             />
-            <p className="mr-1">{user?.firstname}</p>
+            <p className="mr-1">{user?.firstname || user?.name}</p>
             <ChevronDownIcon />
           </Button>
         </Popover>
@@ -74,11 +74,11 @@ function Navbar() {
               <Avatar
                 isSolid
                 src={user?.profilePicture}
-                className="mr-1 my-1"
-                name={user?.firstname + ' ' + user?.lastname}
+                className="mr-2 my-1"
+                name={user?.name || user?.firstname + ' ' + user?.lastname}
                 size={30}
               />
-              <p className="mr-1">{user?.firstname}</p>
+              <p className="mr-1">{user?.firstname || user?.name}</p>
             </div>
             <Menu.Group>
               {isLoggedIn && (
