@@ -9,13 +9,12 @@ import GlobalContext from '../../../../store/globalContext';
 import handleError from '../../../../utils/handleAPIErrors';
 import makeApiCall from '../../../../utils/makeApiCall';
 
-function UserDetails() {
+function CompanyDetails() {
   const [states, setStates] = useState([]);
   const [fetchingStates, setFecthingStates] = useState(true);
   const [subtting, setSubmitting] = useState(false);
   const [initialValues, setInitialValues] = useState({
-    firstname: '',
-    lastname: '',
+    name: '',
     email: '',
     bio: '',
     streetAddress: '',
@@ -31,10 +30,9 @@ function UserDetails() {
 
   useEffect(() => {
     setInitialValues({
-      firstname: user?.firstname,
-      lastname: user?.lastname,
+      name: user?.name,
       email: user?.email,
-      bio: user?.bio,
+      description: user?.description,
       streetAddress: user?.streetAddress,
       state: user?.state,
     });
@@ -55,14 +53,13 @@ function UserDetails() {
   };
 
   const userValidation = yup.object().shape({
-    firstname: yup.string().required('Please enter your first name.'),
-    lastname: yup.string().required('Please enter your last name.'),
+    name: yup.string().required('Please enter your company name.'),
     email: yup
       .string()
       .required('Please enter your email address.')
       .email('Please enter a valid email address.'),
-    bio: yup.string(),
-    streetAddress: yup.string(),
+    description: yup.string(),
+    streetAddress: yup.string().required('Please enter company street address.'),
     state: yup.string().required('Please select a state.'),
   });
 
@@ -91,7 +88,7 @@ function UserDetails() {
           data: formData,
         });
 
-        const res = await makeApiCall('/user/update-profile-picture', {
+        const res = await makeApiCall('/company/update-profile-picture', {
           method: 'POST',
           headers: {
             'x-auth-token': token,
@@ -125,16 +122,10 @@ function UserDetails() {
   };
 
   return (
-    <div className="w-full max-w-4xl my-8 p-8 phone:p-3">
-      <p className="text-xl font-medium mb-10">User Details</p>
+    <div className="w-full max-w-4xl mx-auto my-8 p-8 phone:p-3">
+      <p className="text-xl font-medium mb-10">Company Details</p>
       <div className="w-full flex flex-col items-center mb-10">
-        <Avatar
-          className="mb-3"
-          isSolid
-          src={user?.profilePicture}
-          name={user?.firstname + ' ' + user?.lastname}
-          size={60}
-        />
+        <Avatar className="mb-3" isSolid src={user?.profilePicture} name={user?.name} size={60} />
         <div className="flex flex-wrap space-x-2">
           <div>
             <Upload onChange={(info) => onUpload(info)} maxCount={'1'} multiple={false}>
@@ -154,7 +145,7 @@ function UserDetails() {
               onClick={async () => {
                 setDeleting(true);
                 try {
-                  const res = await makeApiCall('/user/update-profile-picture', {
+                  const res = await makeApiCall('/company/update-profile-picture', {
                     method: 'POST',
                     headers: {
                       'x-auth-token': token,
@@ -197,7 +188,7 @@ function UserDetails() {
         onSubmit={async (values) => {
           setSubmitting(true);
           try {
-            const { data, message } = await makeApiCall('/user/edit-profile', {
+            const { data, message } = await makeApiCall('/company/edit-profile', {
               data: values,
               method: 'post',
               headers: {
@@ -206,7 +197,7 @@ function UserDetails() {
             });
 
             const {
-              user: { firstname, lastname, email, bio, streetAddress, state },
+              company: { name, email, description, streetAddress, state },
             } = data;
 
             toaster.success(message);
@@ -215,10 +206,9 @@ function UserDetails() {
               'user',
               JSON.stringify({
                 ...user,
-                firstname,
-                lastname,
+                name,
                 email,
-                bio,
+                description,
                 streetAddress,
                 state,
               }),
@@ -227,10 +217,9 @@ function UserDetails() {
               type: 'setUser',
               payload: {
                 ...user,
-                firstname,
-                lastname,
+                name,
                 email,
-                bio,
+                description,
                 streetAddress,
                 state,
               },
@@ -249,36 +238,19 @@ function UserDetails() {
               <div className="flex phone:flex-wrap w-full space-x-5 phone:space-x-0">
                 <div className="w-full mb-4">
                   <label htmlFor="firstname" className="font-medium">
-                    First Name
+                    Company Name
                   </label>
                   <Input
-                    name="firstname"
+                    name="name"
                     className="w-full"
                     disabled={subtting}
-                    value={values.firstname}
+                    value={values.name}
                     size="large"
-                    placeholder="First Name"
+                    placeholder="Company Name"
                     onChange={handleChange}
                   />
-                  {errors.firstname && touched.firstname && (
-                    <p className="mt-1 text-red-500 text-sm">{errors.firstname}</p>
-                  )}
-                </div>
-                <div className="w-full mb-4">
-                  <label htmlFor="lastname" className="font-medium">
-                    Last Name
-                  </label>
-                  <Input
-                    name="lastname"
-                    className="w-full"
-                    disabled={subtting}
-                    value={values.lastname}
-                    size="large"
-                    placeholder="Last Name"
-                    onChange={handleChange}
-                  />
-                  {errors.lastname && touched.lastname && (
-                    <p className="mt-1 text-red-500 text-sm">{errors.lastname}</p>
+                  {errors.name && touched.name && (
+                    <p className="mt-1 text-red-500 text-sm">{errors.name}</p>
                   )}
                 </div>
               </div>
@@ -313,20 +285,20 @@ function UserDetails() {
               </div>
               <div className="w-full mb-4">
                 <label htmlFor="bio" className="font-medium">
-                  Bio
+                  Description
                 </label>
                 <Input.TextArea
-                  name="bio"
+                  name="description"
                   className="w-full"
                   rows={5}
                   disabled={subtting}
-                  value={values.bio}
+                  value={values.description}
                   size="large"
-                  placeholder="Bio"
+                  placeholder="Description"
                   onChange={handleChange}
                 />
-                {errors.bio && touched.bio && (
-                  <p className="mt-1 text-red-500 text-sm">{errors.bio}</p>
+                {errors.description && touched.description && (
+                  <p className="mt-1 text-red-500 text-sm">{errors.description}</p>
                 )}
               </div>
               <div className="flex space-x-5 phone:flex-wrap phone:space-x-0">
@@ -390,4 +362,4 @@ function UserDetails() {
   );
 }
 
-export default UserDetails;
+export default CompanyDetails;
