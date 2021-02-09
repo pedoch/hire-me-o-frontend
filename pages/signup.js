@@ -595,17 +595,16 @@ Signup.getInitialProps = async ({ query }) => {
 
     if (query != {}) {
       if (query.selected && query.selected === 'company') tabKey = '2';
-      else if (query.selected && query.selected === 'seeker') tabKey = '1';
     }
   } catch (error) {
     // console.log(error);
-  } finally {
-    return {
-      states,
-      tags,
-      tabKey,
-    };
   }
+
+  return {
+    states,
+    tags,
+    tabKey,
+  };
 };
 
 export default Signup;
