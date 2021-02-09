@@ -51,14 +51,14 @@ function Home({ tags, states }) {
             <a href="/signup?selected=company" className="text-green-700 font-semibold">
               SIGN UP
             </a>{' '}
-            as an Recruiter and register your company/business and gain access to potential
+            as a Recruiter and register your company/business and gain access to potential
             employees.
           </p>
           <p className="shadow rounded max-w-md p-8 text-center mt-4">
             <a href="/signup?selected=seeker" className="text-green-700 font-semibold">
               SIGN UP
             </a>{' '}
-            as a recruit, build your profile, upload your CV and start applying for your dream job!
+            as a Recruit, build your profile, upload your CV and start applying for your dream job!
           </p>
         </div>
       </div>
