@@ -1,5 +1,5 @@
 import { Badge, Button, Modal, Popover, Table, Tag } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
 import GlobalContext from '../../../../store/globalContext';
 import handleErrors from '../../../../utils/handleAPIErrors';
@@ -66,7 +66,7 @@ function Job_Responses() {
       title: 'Date',
       dataIndex: 'createdAt',
       render: (date) => {
-        return <p className="whitespace-no-wrap">{moment(date).format('DD-MM-yyyy')}</p>;
+        return <p className="whitespace-no-wrap">{dayjs(date).format('DD-MM-YYYY')}</p>;
       },
     },
     {

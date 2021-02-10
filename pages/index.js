@@ -120,32 +120,6 @@ function Home({ tags, states }) {
       <div className="w-full py-8 px-4 flex flex-col items-center">
         <p className="text-2xl mb-2 font-semibold">Recomended Jobs for You</p>
         <hr className="w-full max-w-xs mb-8" />
-        {/* <div
-          className="w-full grid grid-cols-4 tablet:grid-cols-3 smallTablet:grid-cols-2 phone:grid-cols-1"
-          style={{ maxWidth: '1500px' }}
-        >
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((job, index) => (
-            <Link href="#" key={index}>
-              <a className="hover:text-black">
-                <div className="col-span-1 shadow h-56 rounded p-4 m-2 flex flex-col justify-between hover:shadow-lg">
-                  <span>
-                    <Avatar shape="square" size={64} className="mb-2" />
-                    <p className="font-semibold text-lg">Software Developemnt Intern at:</p>
-                    <Link href="/company/stritech">
-                      <a>
-                        <p className="text-lg font-semibold text-primary">StriTech</p>
-                      </a>
-                    </Link>
-                  </span>
-                  <div>
-                    <p className="text-sm">Lagos</p>
-                    <p className="text-sm">1 month ago</p>
-                  </div>
-                </div>
-              </a>
-            </Link>
-          ))}
-        </div> */}
         {topPostsForYou.length < 1 ? (
           <p className="text-xl font-semibold">No posts here</p>
         ) : (
