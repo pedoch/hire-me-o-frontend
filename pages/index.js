@@ -1,10 +1,65 @@
 import { Avatar, Input, Select } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useContext, useEffect, useState } from 'react';
 import { MainLayout } from '../components/common';
+import GlobalContext from '../store/globalContext';
+import handleError from '../utils/handleAPIErrors';
 import makeApiCall from '../utils/makeApiCall';
 
 function Home({ tags, states }) {
+  const [loadingForYou, setLoadingForYou] = useState(false);
+  const [topPostsForYou, setTopPostsForYou] = useState([]);
+  const [loadingTopPosts, setLoadingTopPosts] = useState(false);
+  const [topPosts, setTopPosts] = useState([]);
+
+  const { state, actions } = useContext(GlobalContext);
+
+  const { user, token } = state;
+
+  useEffect(() => {
+    getTopPosts();
+    if (
+      localStorage.getItem('userToken') &&
+      JSON.parse(localStorage.getItem('user')) &&
+      JSON.parse(localStorage.getItem('user')).firstname
+    )
+      getTopPostsForYou(localStorage.getItem('userToken'));
+  }, []);
+
+  const getTopPostsForYou = async (userToken) => {
+    setLoadingForYou(true);
+    try {
+      const { data } = await makeApiCall('/posts/get-top-posts-for-you', {
+        method: 'get',
+        headers: {
+          'x-auth-token': userToken,
+        },
+      });
+
+      setTopPostsForYou(data.posts);
+    } catch (error) {
+      handleError('Unable to load top post specialised for you.', error);
+    } finally {
+      setLoadingForYou(false);
+    }
+  };
+
+  const getTopPosts = async () => {
+    setLoadingTopPosts(true);
+    try {
+      const { data } = await makeApiCall('/posts/get-top-posts', {
+        method: 'get',
+      });
+
+      setTopPosts(data.posts);
+    } catch (error) {
+      handleError('Unable to load top post specialised for you.', error);
+    } finally {
+      setLoadingTopPosts(false);
+    }
+  };
+
   const { Option } = Select;
 
   return (
@@ -63,9 +118,9 @@ function Home({ tags, states }) {
         </div>
       </div>
       <div className="w-full py-8 px-4 flex flex-col items-center">
-        <p className="text-2xl mb-2 font-semibold">Top Jobs for You</p>
+        <p className="text-2xl mb-2 font-semibold">Recomended Jobs for You</p>
         <hr className="w-full max-w-xs mb-8" />
-        <div
+        {/* <div
           className="w-full grid grid-cols-4 tablet:grid-cols-3 smallTablet:grid-cols-2 phone:grid-cols-1"
           style={{ maxWidth: '1500px' }}
         >
@@ -90,7 +145,77 @@ function Home({ tags, states }) {
               </a>
             </Link>
           ))}
-        </div>
+        </div> */}
+        {topPostsForYou.length < 1 ? (
+          <p className="text-xl font-semibold">No posts here</p>
+        ) : (
+          <div
+            className="w-full grid justify-center grid-cols-4 tablet:grid-cols-3 smallTablet:grid-cols-2 phone:grid-cols-1"
+            style={{ maxWidth: '1500px' }}
+          >
+            {topPostsForYou.map((job, index) => (
+              <a href={`/job/${job._id}`} className="hover:text-black">
+                <div className="col-span-1 shadow h-56 rounded p-4 m-2 flex flex-col justify-between hover:shadow-lg">
+                  <span>
+                    <Avatar
+                      shape="square"
+                      size={64}
+                      className="mb-2"
+                      src={job.companyId.profilePicture}
+                    >
+                      {job.companyId.name}
+                    </Avatar>
+                    <p className="font-semibold text-lg">{job.title} at:</p>
+                    <a href={`/company/${job.companyId._id}`}>
+                      <p className="text-lg font-semibold text-primary">{job.companyId.name}</p>
+                    </a>
+                  </span>
+                  <div>
+                    <p className="text-sm">{job.state}</p>
+                    <p className="text-sm">1 month ago</p>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="w-full py-8 px-4 flex flex-col items-center">
+        <p className="text-2xl mb-2 font-semibold">Top Jobs</p>
+        <hr className="w-full max-w-xs mb-8" />
+        {topPosts.length < 1 ? (
+          <p className="text-xl font-semibold">No posts here</p>
+        ) : (
+          <div
+            className="w-full grid justify-center grid-cols-4 tablet:grid-cols-3 smallTablet:grid-cols-2 phone:grid-cols-1"
+            style={{ maxWidth: '1500px' }}
+          >
+            {topPosts.map((job, index) => (
+              <a href={`/job/${job._id}`} className="hover:text-black">
+                <div className="col-span-1 shadow h-56 rounded p-4 m-2 flex flex-col justify-between hover:shadow-lg">
+                  <span>
+                    <Avatar
+                      shape="square"
+                      size={64}
+                      className="mb-2"
+                      src={job.companyId.profilePicture}
+                    >
+                      {job.companyId.name}
+                    </Avatar>
+                    <p className="font-semibold text-lg">{job.title} at:</p>
+                    <a href={`/company/${job.companyId._id}`}>
+                      <p className="text-lg font-semibold text-primary">{job.companyId.name}</p>
+                    </a>
+                  </span>
+                  <div>
+                    <p className="text-sm">{job.state}</p>
+                    <p className="text-sm">1 month ago</p>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
       </div>
       <div className="w-full py-8 px-4 flex flex-col items-center mb-16">
         <p className="text-2xl mb-2 font-semibold">Job Categories</p>
@@ -114,13 +239,10 @@ function Home({ tags, states }) {
 }
 
 export async function getStaticProps(context) {
-  let states = [];
   let tags = [];
   try {
-    // let res = await makeApiCall("/states/get-states", { method: "get" });
-    // states = res.data.states;
     let { data } = await makeApiCall('/tags/get-tags', { method: 'get' });
-    // let res = await axios.get("/tags/get-tags");
+
     tags = data.tags;
   } catch (error) {
     console.error(error);
