@@ -1,3 +1,4 @@
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { Badge, Button, Modal, Popover, Table, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { useContext, useEffect, useState } from 'react';
@@ -7,7 +8,6 @@ import makeApiCall from '../../../../utils/makeApiCall';
 
 function Job_Responses() {
   const [posts, setPosts] = useState([]);
-  const [selectedPost, setSelectedPost] = useState({});
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [loadingResponses, setLoadingResponses] = useState(false);
   const [responses, setResponses] = useState([]);
@@ -59,8 +59,91 @@ function Job_Responses() {
     }
   };
 
+  // {tags.map((tag, index) => {
+  //           let color = tag.name.length > 5 ? 'geekblue' : 'green';
+  //           return (
+  //             <Tag color={color} key={tag.name + index}>
+  //               {tag.name}
+  //             </Tag>
+  //           );
+  //         })}
+
   const columns = [
-    { title: 'Title', dataIndex: 'title', fixed: 'left' },
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      fixed: 'left',
+      render: (title, record) => {
+        return (
+          <div className="flex items-center">
+            <Popover
+              content={
+                <div>
+                  <div className="mb-2">
+                    <p className="font-semibold">Title</p>
+                    <p>{record.title}</p>
+                  </div>
+                  <div className="mb-2">
+                    <p className="font-semibold">Description</p>
+                    <p>{record.description}</p>
+                  </div>
+                  <div className="mb-2">
+                    <p className="font-semibold">Tags</p>
+                    {record.tags ? (
+                      <div className="flex">
+                        {record.tags.map((tag, index) => (
+                          <Tag color="geekblue" key={tag.name + index}>
+                            {tag.name}
+                          </Tag>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>N/A</p>
+                    )}
+                  </div>
+                  <div className="mb-2">
+                    <p className="font-semibold">Salary</p>
+                    <p>₦{record.salary?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+                  </div>
+                  <div className="mb-2">
+                    <p className="font-semibold">Requirements</p>
+                    {record.requirements ? (
+                      <ul className="list-disc ml-5">
+                        {record.requirements.map((req, index) => (
+                          <li key={req + index}>{req}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>N/A</p>
+                    )}
+                  </div>
+                  <div className="mb-2">
+                    <p className="font-semibold">Skills</p>
+                    {record.skills ? (
+                      <div className="flex">
+                        {record.skills.map((skill, index) => (
+                          <Tag color="green" key={skill + index}>
+                            {skill}
+                          </Tag>
+                        ))}
+                      </div>
+                    ) : (
+                      <p>N/A</p>
+                    )}
+                  </div>
+                  <p></p>
+                </div>
+              }
+              title="Job Details"
+              trigger="click"
+            >
+              <InfoCircleOutlined title="Click Me" className="mr-2 cursor-pointer text-blue-500" />
+            </Popover>
+            {title}
+          </div>
+        );
+      },
+    },
     { title: 'Employment Type', dataIndex: 'employmentType' },
     {
       title: 'Date',
@@ -68,40 +151,6 @@ function Job_Responses() {
       render: (date) => {
         return <p className="whitespace-no-wrap">{dayjs(date).format('DD-MM-YYYY')}</p>;
       },
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      render: (desc) => (
-        <Popover className="max-w-sm" content={<p>{desc}</p>}>
-          <p className="overflow-ellipsis">{desc}</p>
-        </Popover>
-      ),
-    },
-    {
-      title: 'Salary',
-      dataIndex: 'salary',
-      render: (sal) => <p>₦{sal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>,
-    },
-    {
-      title: 'Tags',
-      dataIndex: 'tags',
-      render: (tags) => (
-        <span>
-          {tags.map((tag, index) => {
-            let color = tag.name.length > 5 ? 'geekblue' : 'green';
-            return (
-              <Tag color={color} key={tag.name + index}>
-                {tag.name}
-              </Tag>
-            );
-          })}
-        </span>
-      ),
-    },
-    {
-      title: 'No. Of Applications',
-      dataIndex: 'numberOfResponses',
     },
     {
       title: 'Status',
@@ -114,10 +163,11 @@ function Job_Responses() {
       ),
     },
     {
-      title: 'Actions',
-      key: '_id',
-      render: (id, record) => (
-        <span className="flex flex-col">
+      title: 'No. Of Applications',
+      dataIndex: 'numberOfResponses',
+      render: (res, record) => (
+        <span className="flex items-center">
+          <p>{res}</p>
           <Button
             type="link"
             onClick={(e) => {
@@ -125,9 +175,20 @@ function Job_Responses() {
               getResponses(record);
             }}
           >
-            Applicants
+            View Applicants
           </Button>
-          <Button type="link" className="text-red-500 mb-1">
+        </span>
+      ),
+    },
+    {
+      title: 'Actions',
+      key: '_id',
+      render: (id, record) => (
+        <span className="flex flex-col justify-start">
+          <Button type="link" className="mb-1">
+            Change Status
+          </Button>
+          <Button type="link" danger>
             Delete
           </Button>
         </span>
@@ -160,7 +221,7 @@ function Job_Responses() {
                 </div>
               }
             >
-              <Tag color={color} key={skill?.name + index}>
+              <Tag color={color} className="mb-1" key={skill?.name + index}>
                 {skill?.name} - {skill?.yearsOfExperience}
               </Tag>
             </Popover>

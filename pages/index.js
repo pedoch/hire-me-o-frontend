@@ -190,8 +190,11 @@ function Home({ tags }) {
                         {job.companyId.name}
                       </Avatar>
                       <p className="font-semibold text-lg">{job.title} at:</p>
-                      <a href={`/company/${job.companyId._id}`}>
-                        <p className="text-lg font-semibold text-primary">{job.companyId.name}</p>
+                      <a
+                        className="text-lg font-semibold text-primary"
+                        href={`/company/${job.companyId._id}`}
+                      >
+                        {job.companyId.name}
                       </a>
                     </span>
                     <div>
@@ -251,8 +254,11 @@ function Home({ tags }) {
                       {job.companyId.name}
                     </Avatar>
                     <p className="font-semibold text-lg">{job.title} at:</p>
-                    <a href={`/company/${job.companyId._id}`}>
-                      <p className="text-lg font-semibold text-primary">{job.companyId.name}</p>
+                    <a
+                      className="text-lg font-semibold text-primary"
+                      href={`/company/${job.companyId._id}`}
+                    >
+                      {job.companyId.name}
                     </a>
                   </span>
                   <div>
