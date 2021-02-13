@@ -89,18 +89,17 @@ function SearchJobs({ jobs, setJobs, tags, states, text, tagSet }) {
                     {job.companyId.name}
                   </Avatar>
                   <p className="font-semibold text-lg">{job.title} at:</p>
-                  <a href={`/company/${job.companyId._id}`}>
-                    <p className="text-lg font-semibold text-primary">{job.companyId.name}</p>
+                  <a
+                    className="text-lg font-semibold text-primary"
+                    href={`/company/${job.companyId._id}`}
+                  >
+                    {job.companyId.name}
                   </a>
                 </span>
                 <div>
                   <p className="text-sm">{job.state}</p>
                   <div className="flex justify-between">
                     <p className="text-sm">{timeAgo.format(new Date(job.createdAt))}</p>
-                    <p className="text-sm">
-                      {job.numberOfResponses}{' '}
-                      {job.numberOfResponses === 1 ? 'applicant' : 'applicants'}
-                    </p>
                   </div>
                 </div>
               </div>

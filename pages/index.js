@@ -201,10 +201,6 @@ function Home({ tags }) {
                       <p className="text-sm">{job.state}</p>
                       <div className="flex justify-between">
                         <p className="text-sm">{timeAgo.format(new Date(job.createdAt))}</p>
-                        <p className="text-sm">
-                          {job.numberOfResponses}{' '}
-                          {job.numberOfResponses === 1 ? 'applicant' : 'applicants'}
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -265,10 +261,6 @@ function Home({ tags }) {
                     <p className="text-sm">{job.state}</p>
                     <div className="flex justify-between">
                       <p className="text-sm">{timeAgo.format(new Date(job.createdAt))}</p>
-                      <p className="text-sm">
-                        {job.numberOfResponses}{' '}
-                        {job.numberOfResponses === 1 ? 'applicant' : 'applicants'}
-                      </p>
                     </div>
                   </div>
                 </div>
