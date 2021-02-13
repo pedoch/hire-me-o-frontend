@@ -74,7 +74,7 @@ function SearchCompanies({ companies, setCompanies, tags, states, text, tagSet }
             <a
               href={`/company/${company._id}`}
               key={company.name + index}
-              className="hover:text-black h-auto"
+              className="hover:text-black h-auto mb-2"
             >
               <div className="col-span-1 shadow rounded p-4 m-2 h-full flex flex-col justify-between hover:shadow-lg">
                 <span className="flex">
@@ -83,7 +83,10 @@ function SearchCompanies({ companies, setCompanies, tags, states, text, tagSet }
                   </Avatar>
                   <div className="h-full">
                     <p className="font-semibold text-lg">{company.name}</p>
-                    <p className="">Subscribers: {company.subscribers || 0}</p>
+                    <p className="">
+                      {company.subscribers || 0}{' '}
+                      {company.subscribers === 1 ? 'subscriber' : 'subscribers'}
+                    </p>
                     <p className="text-sm mt-auto">{company.state}</p>
                   </div>
                 </span>

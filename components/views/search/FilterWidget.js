@@ -18,7 +18,7 @@ function FilterWidget({
     <>
       <p className="text-lg font-semibold mb-3">Filters</p>
       <div className="w-full flex justify-between space-x-5 phone:space-x-0 smallTablet:flex-wrap">
-        <div className="w-full mb-4">
+        <div className="w-full mb-2">
           <Input
             className="w-full"
             value={name}
@@ -26,7 +26,7 @@ function FilterWidget({
             placeholder={text}
           />
         </div>
-        <div className="w-full mb-4">
+        <div className="w-full mb-2">
           <Select
             name="state"
             className="w-full"
@@ -44,7 +44,7 @@ function FilterWidget({
             ))}
           </Select>
         </div>
-        <div className="w-full mb-4">
+        <div className="w-full mb-2">
           <Select
             name="tags"
             mode="multiple"
@@ -63,7 +63,7 @@ function FilterWidget({
             ))}
           </Select>
         </div>
-        <Button type="primary" onClick={() => cb()} disabled={searching}>
+        <Button type="primary" className="mb-4" onClick={() => cb()} disabled={searching}>
           {searching ? 'Applying...' : 'Apply'}
         </Button>
       </div>

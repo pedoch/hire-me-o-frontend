@@ -59,7 +59,7 @@ function Job({ post }) {
         </div>
       </div>
       <div className="w-full max-w-5xl mx-auto py-10 text-lg flex justify-between px-5 smallTablet:flex-wrap">
-        <div>
+        <div className="max-w-2xl">
           <p className="text-2xl font-bold">{post.title}</p>
           <p className="mb-5 text-xl">
             at{' '}
@@ -116,19 +116,21 @@ function Job({ post }) {
           )}
         </div>
 
-        <div className="flex mb-5">
-          <Button
-            size="large"
-            className="mr-2"
-            disabled={user?.savedPosts?.includes(post._id) || saving}
-            onClick={() => savePost()}
-          >
-            {user?.savedPosts?.includes(post._id) ? 'Saved' : saving ? 'Saving' : 'Save Post'}
-          </Button>
-          <Button type="primary" size="large">
-            Apply to Job
-          </Button>
-        </div>
+        {!user?.name && (
+          <div className="flex mb-5">
+            <Button
+              size="large"
+              className="mr-2"
+              disabled={user?.savedPosts?.includes(post._id) || saving}
+              onClick={() => savePost()}
+            >
+              {user?.savedPosts?.includes(post._id) ? 'Saved' : saving ? 'Saving' : 'Save Post'}
+            </Button>
+            <Button type="primary" size="large">
+              Apply to Job
+            </Button>
+          </div>
+        )}
       </div>
     </MainLayout>
   );

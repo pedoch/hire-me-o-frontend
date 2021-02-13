@@ -29,8 +29,8 @@ function Search({ postList, companyList, tags, states, tagSet }) {
           <p className="text-4xl font-semibold text-white">Search...</p>
         </div>
       </div>
-      <div className="w-full flex flex-col justify-center items-center py-8 px-4 shadow">
-        <p className="font-semibold text-2xl mb-4">Search Hire Me O!</p>
+      <div className="w-full flex flex-col justify-center items-center py-6 px-4 shadow">
+        <p className="font-semibold text-2xl">Search Hire Me O!</p>
       </div>
       <div className="w-full max-w-6xl mx-auto my-8 px-2">
         <Tabs defaultActiveKey="1" centered={true}>
