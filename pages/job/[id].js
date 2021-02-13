@@ -39,7 +39,7 @@ function Job({ post }) {
 
       localStorage.setItem('user', JSON.stringify({ ...user, savedPosts: newSavedPosts }));
 
-      actions('setUser', { ...user, savedPosts: newSavedPosts });
+      actions({ type: 'setUser', payload: { ...user, savedPosts: newSavedPosts } });
 
       toaster.success('Job saved successfully.');
     } catch (error) {
