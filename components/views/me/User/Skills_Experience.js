@@ -161,7 +161,7 @@ function Skills_Experience() {
                       ? 'Uploading...'
                       : deleteing
                       ? 'Deleting'
-                      : user?.profilePicture
+                      : user?.resume
                       ? 'Change Resume'
                       : 'Upload Resume'}
                   </Button>
