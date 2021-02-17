@@ -178,7 +178,7 @@ function Home({ tags }) {
               style={{ maxWidth: '1500px' }}
             >
               {topPostsForYou.map((job, index) => (
-                <a href={`/job/${job._id}`} className="hover:text-black">
+                <a href={`/job/${job._id}`} key={job.title + index} className="hover:text-black">
                   <div className="col-span-1 shadow h-56 rounded p-4 m-2 flex flex-col justify-between hover:shadow-lg">
                     <span>
                       <Avatar
