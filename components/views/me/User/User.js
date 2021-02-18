@@ -7,7 +7,7 @@ import UserDetails from './UserDetails';
 function User() {
   const { TabPane } = Tabs;
   return (
-    <div className="w-full max-w-4xl mx-4 my-8 px-5">
+    <div className="w-full max-w-6xl mx-4 my-8 px-5">
       <p className="text-2xl font-medium">Your User Profile</p>
       <Tabs defaultActiveKey="1">
         <TabPane tab="User Details" key="1">
