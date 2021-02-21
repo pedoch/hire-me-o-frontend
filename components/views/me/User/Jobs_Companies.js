@@ -20,7 +20,7 @@ function Jobs_Companies() {
           <AppliedJobs />
         </TabPane>
         <TabPane tab="Subscribed Companies" key="3">
-          <p>Subscribed Companies</p>
+          <SubscribedCompanies />
         </TabPane>
       </Tabs>
     </div>
@@ -57,7 +57,7 @@ function SavedJobs() {
 
       setJobs(data.posts);
     } catch (error) {
-      handleError('Could unsave job', error);
+      handleError("Couldn't get jobs", error);
     } finally {
       setFetchingJobs(false);
     }
@@ -159,12 +159,13 @@ function SavedJobs() {
             className="text-yellow-600"
             onClick={() => unsaveJob(record._id)}
           >
-            {unsaving ? 'Unsubscribing' : 'Unsubscribe'}
+            {unsaving ? 'Removing' : 'Remove'}
           </Button>
         );
       },
     },
   ];
+
   return (
     <Table
       dataSource={jobs}
@@ -172,6 +173,9 @@ function SavedJobs() {
       columns={columns}
       className="w-full"
       scroll={{ x: 500 }}
+      pagination={{
+        pageSize: 10,
+      }}
     />
   );
 }
@@ -205,7 +209,7 @@ function AppliedJobs() {
 
       setJobs(data.posts);
     } catch (error) {
-      handleError('Could unsave job', error);
+      handleError("Could't get jobs", error);
     } finally {
       setFetchingJobs(false);
     }
@@ -265,7 +269,6 @@ function AppliedJobs() {
       title: 'Actions',
       dataIndex: 'responses',
       render: (response) => {
-        console.log(response[0].skills);
         return (
           <Popover
             content={
@@ -316,6 +319,118 @@ function AppliedJobs() {
       columns={columns}
       className="w-full"
       scroll={{ x: 500 }}
+      pagination={{
+        pageSize: 10,
+      }}
+    />
+  );
+}
+
+function SubscribedCompanies() {
+  const [companies, setCompanies] = useState([]);
+  const [fetchingCompanies, setFetchingCompanies] = useState(false);
+  const [unsubscribing, setUnsubscribing] = useState(false);
+
+  const { state, actions } = useContext(GlobalContext);
+
+  const { user, token } = state;
+
+  useEffect(() => {
+    getUserSubscribedCompanies();
+  }, []);
+
+  const getUserSubscribedCompanies = async () => {
+    // console.log('hahahaha');
+    setFetchingCompanies(true);
+    try {
+      const { data } = await makeAPICall('/user/get-companies', {
+        method: 'get',
+        headers: {
+          'x-auth-token': token,
+        },
+      });
+
+      setCompanies(data.companies);
+    } catch (error) {
+      handleError("Couldn't get companies", error);
+    } finally {
+      setFetchingCompanies(false);
+    }
+  };
+
+  const unSubscribeToCompany = async (companyId) => {
+    setUnsubscribing(true);
+    try {
+      // console.log(post._id);
+      const { data } = await makeAPICall('/company/unsubscribe-to-companies', {
+        method: 'post',
+        headers: {
+          'x-auth-token': token,
+        },
+        data: {
+          companyId: companyId,
+        },
+      });
+
+      let newSavedCompanies = user.subscribed.filter((com) => {
+        if (com != companyId) return com;
+      });
+
+      localStorage.setItem('user', JSON.stringify({ ...user, subscribed: newSavedCompanies }));
+
+      actions({ type: 'setUser', payload: { ...user, subscribed: newSavedCompanies } });
+
+      getUserSubscribedCompanies();
+
+      toaster.success('Unsubscribed from company successfully.');
+    } catch (error) {
+      console.log(error);
+      handleError('Unable to unsubscribe from company.', error);
+    } finally {
+      setUnsubscribing(false);
+    }
+  };
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      render: (name, record) => {
+        return (
+          <a href={`/company/${record._id}`} className="underline text-primary">
+            {name}
+          </a>
+        );
+      },
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'responses',
+      width: 150,
+      render: (res, record) => {
+        return (
+          <Button
+            type="link"
+            disable={unsubscribing || fetchingCompanies}
+            className="text-yellow-600"
+            onClick={() => unSubscribeToCompany(record._id)}
+          >
+            {unsubscribing ? 'Unsubscribing' : 'Unsubscribe'}
+          </Button>
+        );
+      },
+    },
+  ];
+  return (
+    <Table
+      dataSource={companies}
+      loading={fetchingCompanies}
+      columns={columns}
+      className="w-full"
+      scroll={{ x: 500 }}
+      pagination={{
+        pageSize: 10,
+      }}
     />
   );
 }

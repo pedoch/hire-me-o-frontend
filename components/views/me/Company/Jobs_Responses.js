@@ -248,6 +248,9 @@ function Job_Responses() {
         dataSource={posts}
         loading={loadingPosts}
         scroll={{ x: 1000 }}
+        pagination={{
+          pageSize: 10,
+        }}
       />
       <Modal
         title="Responses"
@@ -267,6 +270,9 @@ function Job_Responses() {
           dataSource={responses}
           loading={loadingResponses}
           scroll={{ x: 1000 }}
+          pagination={{
+            pageSize: 10,
+          }}
         />
       </Modal>
     </div>
