@@ -1,6 +1,5 @@
-import { MoreOutlined } from '@ant-design/icons';
-import { Badge, Button, Popover, Table, Tabs } from 'antd';
-import { Spinner, toaster } from 'evergreen-ui';
+import { Badge, Button, Popover, Table, Tabs, Tag } from 'antd';
+import { toaster } from 'evergreen-ui';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import { useContext, useEffect, useState } from 'react';
@@ -56,11 +55,7 @@ function SavedJobs() {
         },
       });
 
-      console.log(data);
-
       setJobs(data.posts);
-
-      // toaster.success('Saved jobs fecthed successfully')
     } catch (error) {
       handleError('Could unsave job', error);
     } finally {
@@ -97,8 +92,6 @@ function SavedJobs() {
         },
       });
 
-      // console.log(data);
-
       getUserSavedJobs();
 
       toaster.success('Job unsaved successfully');
@@ -108,69 +101,84 @@ function SavedJobs() {
       setUnsaving(false);
     }
   };
+
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      render: (title, record) => {
+        return (
+          <a href={`/job/${record._id}`} className="underline text-primary">
+            {title}
+          </a>
+        );
+      },
+    },
+    {
+      title: 'Company',
+      dataIndex: 'companyId',
+      render: (company) => {
+        return (
+          <a href={`/company/${company._id}`} className="underline text-primary">
+            {company.name}
+          </a>
+        );
+      },
+    },
+    {
+      title: 'Posted',
+      dataIndex: 'createdAt',
+      render: (date) => {
+        return <p>{timeAgo.format(new Date(date))}</p>;
+      },
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      render: (status) => {
+        return (
+          <span className="flex items-center">
+            <Badge
+              status={`${
+                status === 'Active' ? 'processing' : status === 'Suspended' ? 'warning' : 'error'
+              }`}
+            />
+            {status}
+          </span>
+        );
+      },
+    },
+    {
+      title: 'Actions',
+      dataIndex: 'responses',
+      render: (res, record) => {
+        return (
+          <Button
+            type="link"
+            disable={unsaving || fetchingJobs}
+            className="text-yellow-600"
+            onClick={() => unsaveJob(record._id)}
+          >
+            {unsaving ? 'Unsubscribing' : 'Unsubscribe'}
+          </Button>
+        );
+      },
+    },
+  ];
   return (
-    <div className="w-full grid justify-center mt-5 mx-5 pb-10 h-full grid-cols-3 smallTablet:grid-cols-2 phone:grid-cols-1">
-      {fetchingJobs ? (
-        <div className="w-full flex justify-center">
-          <Spinner size={30} />
-        </div>
-      ) : jobs.length > 0 ? (
-        jobs.map((job, index) => {
-          return (
-            <div
-              key={job.title + index}
-              className="hover:text-black col-span-1 h-auto  flex justify-between p-3 mb-2 shadow"
-            >
-              <div>
-                <a href={`/job/${job._id}`} className="font-semibold text-lg">
-                  {job.title} at:
-                </a>
-                <br />
-                <a
-                  className="text-lg font-semibold text-primary"
-                  href={`/company/${job.companyId._id}`}
-                >
-                  {job.companyId.name}
-                </a>
-                <div>
-                  <p className="">{timeAgo.format(new Date(job.createdAt))}</p>
-                  <p className="text-sm">{job.state}</p>
-                </div>
-              </div>
-              <Popover
-                content={
-                  <div>
-                    <Button
-                      type="link"
-                      danger
-                      className="w-full bg-gray-600"
-                      onClick={() => {
-                        unsaveJob(job._id);
-                      }}
-                      disabled={unsaving}
-                    >
-                      Unsave Job
-                    </Button>
-                  </div>
-                }
-                trigger="click"
-              >
-                <MoreOutlined className="text-2xl" />
-              </Popover>
-            </div>
-          );
-        })
-      ) : (
-        <p>You have no saved jobs...</p>
-      )}
-    </div>
+    <Table
+      dataSource={jobs}
+      loading={fetchingJobs || unsaving}
+      columns={columns}
+      className="w-full"
+      scroll={{ x: 500 }}
+    />
   );
 }
 
 function AppliedJobs() {
   const [jobs, setJobs] = useState([]);
   const [fetchingJobs, setFetchingJobs] = useState(false);
-  const [unsaving, setUnsaving] = useState(false);
 
   const { state, actions } = useContext(GlobalContext);
 
@@ -195,11 +203,7 @@ function AppliedJobs() {
         },
       });
 
-      console.log(data);
-
       setJobs(data.posts);
-
-      // toaster.success('Saved jobs fecthed successfully')
     } catch (error) {
       handleError('Could unsave job', error);
     } finally {
@@ -261,7 +265,46 @@ function AppliedJobs() {
       title: 'Actions',
       dataIndex: 'responses',
       render: (response) => {
-        return <Button type="link">View Application</Button>;
+        console.log(response[0].skills);
+        return (
+          <Popover
+            content={
+              <div>
+                <p className="font-semibold">Resume</p>
+                <a
+                  href={response[0].resume.url}
+                  target="_blank"
+                  rel="noopener"
+                  className="text-primary underline"
+                >
+                  {response[0].resume.name}
+                </a>
+                <p className="font-semibold mt-5">Skills</p>
+                <div className="flex">
+                  {response[0].skills.map((skill, index) => {
+                    return (
+                      <Popover
+                        content={
+                          <div>
+                            <p className="font-semibold">{skill?.name}</p>
+                            <p>Years Of Experience: {skill?.yearsOfExperience}</p>
+                          </div>
+                        }
+                      >
+                        <Tag color="geekblue" className="mb-1" key={skill?.name + index}>
+                          {skill?.name} - {skill?.yearsOfExperience}
+                        </Tag>
+                      </Popover>
+                    );
+                  })}
+                </div>
+              </div>
+            }
+            trigger="click"
+          >
+            <Button type="link">View Application</Button>;
+          </Popover>
+        );
       },
     },
   ];

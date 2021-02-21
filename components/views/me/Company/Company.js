@@ -7,7 +7,7 @@ function User() {
   return (
     <div className="w-full max-w-6xl mx-4 my-8 px-5">
       <p className="text-2xl font-medium">Your Company Profile</p>
-      <Tabs defaultActiveKey="1">
+      <Tabs defaultActiveKey="1" size="large">
         <TabPane tab="Company Details" key="1">
           <CompanyDetails />
         </TabPane>
