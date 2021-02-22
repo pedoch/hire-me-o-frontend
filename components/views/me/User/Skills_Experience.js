@@ -22,7 +22,6 @@ function Skills_Experience() {
     if (user?.skills && user?.skills?.length > 0) setSkills(user?.skills);
   }, []);
 
-  const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dsbogvjcc/upload/';
   const CLOUDINARY_UPLOAD_PRESET = 'ayuedatm';
 
   const onUpload = async (info) => {
@@ -37,7 +36,7 @@ function Skills_Experience() {
         formData.append('folder', '/hire-me-o/resumes/');
 
         const { data } = await axios({
-          url: CLOUDINARY_URL,
+          url: 'https://api.cloudinary.com/v1_1/dsbogvjcc/upload/',
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
