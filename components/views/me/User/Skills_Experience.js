@@ -285,7 +285,7 @@ function Skills_Experience() {
                   return (
                     <p
                       key={skill.name + index}
-                      className="text-lg font-semibold mb-2 mr-2 p-1 border border-gray-500 rounded h-auto"
+                      className="font-semibold mb-2 mr-2 p-1 border border-gray-500 rounded h-auto"
                     >
                       {skill.name} - {skill.yearsOfExperience} year(s)
                       <DeleteOutlined
