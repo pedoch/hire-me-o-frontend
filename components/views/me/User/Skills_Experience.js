@@ -31,42 +31,32 @@ function Skills_Experience() {
       try {
         let formData = new FormData();
 
-        formData.append('file', file);
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-        formData.append('folder', '/hire-me-o/resumes/');
+        formData.append('resumeFile', file);
 
-        const { data } = await axios({
-          url: 'https://api.cloudinary.com/v1_1/dsbogvjcc/upload/',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          data: formData,
-        });
+        // const { data } = await axios({
+        //   url: 'https://api.cloudinary.com/v1_1/dsbogvjcc/upload/',
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded',
+        //   },
+        //   data: formData,
+        // });
 
-        const res = await makeApiCall('/user/update-resume', {
+        const { data } = await makeApiCall('/user/update-resume', {
           method: 'POST',
           headers: {
             'x-auth-token': token,
           },
-          data: {
-            resume: {
-              name: file.name,
-              url: data.secure_url,
-            },
-          },
+          data: formData
         });
 
-        toaster.success(res.message);
+        toaster.success(data.message);
 
         localStorage.setItem(
           'user',
           JSON.stringify({
             ...user,
-            resume: {
-              name: file.name,
-              url: data.secure_url,
-            },
+            resume: data.user.resume,
           }),
         );
 
@@ -74,10 +64,7 @@ function Skills_Experience() {
           type: 'setUser',
           payload: {
             ...user,
-            resume: {
-              name: file.name,
-              url: data.secure_url,
-            },
+            resume: data.user.resume,
           },
         });
 

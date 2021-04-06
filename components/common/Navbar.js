@@ -52,7 +52,7 @@ function Navbar() {
           >
             <Avatar
               isSolid
-              src={user?.profilePicture}
+              src={'https://hire-me-o.herokuapp.com/file/'+user?.profilePicture}
               className="mr-2 my-1"
               name={user?.name || user?.firstname + ' ' + user?.lastname}
               size={30}
@@ -73,7 +73,7 @@ function Navbar() {
             >
               <Avatar
                 isSolid
-                src={user?.profilePicture}
+                src={'https://hire-me-o.herokuapp.com/file/'+user?.profilePicture}
                 className="mr-2 my-1"
                 name={user?.name || user?.firstname + ' ' + user?.lastname}
                 size={30}

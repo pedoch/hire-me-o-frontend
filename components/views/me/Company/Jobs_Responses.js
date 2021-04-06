@@ -49,8 +49,6 @@ function Job_Responses() {
         },
       });
 
-      console.log(data);
-
       setResponses(data.responses);
     } catch (error) {
       handleErrors('Unable to load responses', error);
@@ -233,9 +231,16 @@ function Job_Responses() {
       title: 'Resume',
       dataIndex: 'resume',
       render: (resume) => (
-        <a href={resume?.url} target="_blank" rel="noopener" className="text-blue-500">
+        <a href={'https://hire-me-o.herokuapp.com/file/'+resume?.url} target="_blank" rel="noopener" className="text-blue-500">
           {resume?.name}
         </a>
+      ),
+    },
+    {
+      title: 'Relevance',
+      dataIndex: 'relevance',
+      render: (relevance) => (
+        <p>{relevance}%</p>
       ),
     },
   ];

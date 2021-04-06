@@ -68,7 +68,7 @@ function UserDetails() {
 
   const { Option } = Select;
 
-  const CLOUDINARY_UPLOAD_PRESET = 'ayuedatm';
+  // const CLOUDINARY_UPLOAD_PRESET = 'ayuedatm';
 
   const onUpload = async (info) => {
     setUploading(true);
@@ -77,34 +77,34 @@ function UserDetails() {
       try {
         let formData = new FormData();
 
-        formData.append('file', file);
-        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-        formData.append('folder', '/hire-me-o/profile-pictures/');
+        formData.append('profilePictureFile', file);
+        // formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        // formData.append('folder', '/hire-me-o/profile-pictures/');
 
-        const { data } = await axios({
-          url: 'https://api.cloudinary.com/v1_1/dsbogvjcc/upload/',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          data: formData,
-        });
+        // const { data } = await axios({
+        //   url: 'https://api.cloudinary.com/v1_1/dsbogvjcc/upload/',
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded',
+        //   },
+        //   data: formData,
+        // });
 
-        const res = await makeApiCall('/user/update-profile-picture', {
+        const { data } = await makeApiCall('/user/update-profile-picture', {
           method: 'POST',
           headers: {
             'x-auth-token': token,
           },
-          data: { profilePicture: data.secure_url },
+          data: formData,
         });
 
-        toaster.success(res.message);
+        toaster.success(data.message);
 
         localStorage.setItem(
           'user',
           JSON.stringify({
             ...user,
-            profilePicture: data.secure_url,
+            profilePicture: data.user.profilePicture,
           }),
         );
 
@@ -112,7 +112,7 @@ function UserDetails() {
           type: 'setUser',
           payload: {
             ...user,
-            profilePicture: data.secure_url,
+            profilePicture: data.user.profilePicture,
           },
         });
       } catch (error) {
@@ -130,7 +130,7 @@ function UserDetails() {
         <Avatar
           className="mb-3"
           isSolid
-          src={user?.profilePicture}
+          src={'https://hire-me-o.herokuapp.com/file/'+user?.profilePicture}
           name={user?.firstname + ' ' + user?.lastname}
           size={60}
         />

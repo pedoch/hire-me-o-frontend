@@ -428,11 +428,12 @@ const Resume = ({
         )}
         {selectedResumeError && <p className="text-red-500 mt-1 text-sm">{selectedResumeError}</p>}
       </div>
-      <Upload onChange={(info) => onUpload(info)} maxCount={'1'} multiple={false}>
+      {/* <Upload onChange={(info) => onUpload(info)} maxCount={'1'} multiple={false}>
         <Button className="mb-2" icon={<UploadOutlined />} disabled={uploading}>
           {uploading ? 'Uploading...' : 'Upload New Resume'}
         </Button>
-      </Upload>
+      </Upload> */}
+      <p>To change this resume upload a new one to your user profile. Please note previous resumes will still be available to companies that you applied to</p>
     </div>
   );
 };
